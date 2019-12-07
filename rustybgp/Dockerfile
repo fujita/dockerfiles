@@ -3,13 +3,9 @@ FROM rust
 ENV HOME /root
 WORKDIR /root
 
-RUN apt-get update
-RUN apt-get install -qy --no-install-recommends supervisor cmake gcc
+RUN curl -OL https://github.com/osrg/gobgp/releases/download/v2.11.0/gobgp_2.11.0_linux_amd64.tar.gz && tar xzf gobgp_2.11.0_linux_amd64.tar.gz && cp gobgp gobgpd /usr/sbin && rm gobgp_2.11.0_linux_amd64.tar.gz
 
-# go is necessary for build
-RUN wget https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz && tar -C /usr/local -xzf go1.13.4.linux-amd64.tar.gz && rm go1.13.4.linux-amd64.tar.gz
-ENV PATH=$PATH:/usr/local/go/bin
+RUN rustup component add rustfmt
+RUN git clone https://github.com/osrg/rustybgp.git && cd rustybgp && cargo build --release
 
-RUN git clone https://github.com/osrg/rustybgp.git
-RUN cd rustybgp && cargo build
 
