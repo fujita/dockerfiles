@@ -1,9 +1,21 @@
-FROM golang
-LABEL maintainer "FUJITA Tomonori <fujita.tomonori@gmail.com>"
+FROM alpine as builder
 
 ENV HOME /root
 WORKDIR /root
-ENV GO111MODULE on
 
-RUN git clone git://github.com/osrg/gobgp
-RUN cd gobgp && go install ./cmd/gobgpd ./cmd/gobgp
+RUN apk add --no-cache --update wget
+
+RUN wget https://github.com/osrg/gobgp/releases/download/v2.11.0/gobgp_2.11.0_linux_amd64.tar.gz
+RUN tar xzf gobgp_2.11.0_linux_amd64.tar.gz
+
+
+FROM alpine
+
+RUN apk add --no-cache --update supervisor
+
+ADD supervisord.conf /etc/
+
+COPY --from=builder /root/gobgpd /usr/bin
+COPY --from=builder /root/gobgp /usr/bin
+
+ENTRYPOINT ["/usr/bin/supervisord"]
