@@ -10,6 +10,7 @@ RUN tar xzf gobgp_2.11.0_linux_amd64.tar.gz
 
 
 FROM alpine
+EXPOSE 50051
 
 RUN apk add --no-cache --update supervisor
 
