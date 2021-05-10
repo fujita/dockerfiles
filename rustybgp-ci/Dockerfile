@@ -27,7 +27,7 @@ EXPOSE 50051
 RUN apk add --no-cache --update supervisor
 ADD supervisord.conf /etc/
 
-COPY --from=builder /root/rustybgp/target/x86_64-unknown-linux-musl/release/daemon /usr/bin/rustybgpd
+COPY --from=builder /root/rustybgp/target/x86_64-unknown-linux-musl/release/rustybgpd /usr/bin/rustybgpd
 COPY --from=builder /root/gobgp /usr/bin
 
 ENTRYPOINT ["/usr/bin/supervisord"]

@@ -21,6 +21,6 @@ RUN cd rustybgp && cargo build --release --target x86_64-unknown-linux-musl
 
 FROM alpine
 WORKDIR /root
-COPY --from=builder /root/rustybgp/target/x86_64-unknown-linux-musl/release/daemon /usr/sbin/rustybgpd
+COPY --from=builder /root/rustybgp/target/x86_64-unknown-linux-musl/release/rustybgpd /usr/sbin/rustybgpd
 COPY --from=builder /root/gobgpd /usr/sbin
 COPY --from=builder /root/gobgp /usr/sbin
